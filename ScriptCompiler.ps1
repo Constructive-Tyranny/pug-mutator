@@ -24,8 +24,6 @@
 ## [[ CONFIGURABLE VARIABLES START ]] ##
 ########################################
 
-
-
 # What is the mutators sub folder name, where the class files are?
 [string]$SubFolderName = "Classes"
 
@@ -57,6 +55,7 @@
 [string]$UDKBinary = $RenXUDKDirectory + "\Binaries\Win64\UDK.exe"
 [string]$FinalMutatorPath = $RenXBaseDirectory + "\UDKGame\CookedPC\" + $MutatorName + ".u"
 [string]$CompiledMutatorPath = $RenXUDKDirectory + "\UDKGame\Script\" + $MutatorName + ".u"
+[string]$SDKScriptPath = $RenXUDKDirectory + "\UDKGame\Script\"
 [string]$UDKMutatorSourcePath = $RenXUDKDirectory + "\Development\Src\" + $MutatorName + "\Classes"
 [string]$MutatorPath = $MyFolder + "\" + $SubFolderName
 
@@ -72,6 +71,11 @@ Remove-Item -Path $UDKMutatorSourcePath\* -Filter *.* -Confirm:$false -Recurse
 Sleep -seconds 1
 Write-Output "Copying files from $SubFolderName to $UDKMutatorSourcePath"
 Copy-Item ($MutatorPath + "\*") $UDKMutatorSourcePath -Force | Out-Null
+Write-Output " --> Done"
+
+Write-Output "Removing files to force re-compile"
+Remove-Item -Path $SDKScriptPath* -Filter RenX*.* -Confirm:$false -Recurse
+Sleep -seconds 1
 Write-Output " --> Done"
 
 #Run UDK.EXE MAKE
@@ -96,5 +100,5 @@ if ( (Test-Path $CompiledMutatorPath -PathType Any) -eq $true )
     Write-Output "Starting Game"
     Start-Process $RenXBinary -ArgumentList "server $RenXMap?Mutator=$MutatorStartupParam $RenXAdditionalStartupParams"
 } else {
-    Write-Output " --------- BUILD FAILED ----------- "
+    Write-Output " ----------- BUILD FAILED ----------- "
 }
