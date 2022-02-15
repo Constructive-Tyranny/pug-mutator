@@ -50,9 +50,9 @@
 ## Do not touch anything below this line
 
 # Our location:
-[string]$MyFolder = Push-Location 
-[string]$RenXBinary = $RenXBaseDirectory + "\Binaries\Win64\UDK.exe"
-[string]$UDKBinary = $RenXUDKDirectory + "\Binaries\Win64\UDK.exe"
+[string]$MyFolder = split-path -parent $MyInvocation.MyCommand.Definition
+[string]$RenXBinary = $RenXBaseDirectory + "\Binaries\Win32\UDK.exe"
+[string]$UDKBinary = $RenXUDKDirectory + "\Binaries\Win32\UDK.exe"
 [string]$FinalMutatorPath = $RenXBaseDirectory + "\UDKGame\CookedPC\" + $MutatorName + ".u"
 [string]$CompiledMutatorPath = $RenXUDKDirectory + "\UDKGame\Script\" + $MutatorName + ".u"
 [string]$SDKScriptPath = $RenXUDKDirectory + "\UDKGame\Script\"
@@ -74,7 +74,7 @@ Copy-Item ($MutatorPath + "\*") $UDKMutatorSourcePath -Force | Out-Null
 Write-Output " --> Done"
 
 Write-Output "Removing files to force re-compile"
-Remove-Item -Path $SDKScriptPath* -Filter RenX*.* -Confirm:$false -Recurse
+Remove-Item -Path $SDKScriptPath* -Filter RenX*.* -Confirm:$false
 Sleep -seconds 1
 Write-Output " --> Done"
 
